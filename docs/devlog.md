@@ -111,3 +111,21 @@ ai-medical-consult-agent/
 3. 创建依赖文件
 4. 准备 Streamlit 页面
 5. 提交第一次 Git commit
+
+---
+
+## 2026-06-05：前端技术路线调整与规则版 Risk Control
+
+### 本阶段调整
+
+原计划使用 Streamlit 快速搭建 Demo 页面，但在实际预览后发现：
+
+1. 页面美观度不足
+2. 产品展示感较弱
+3. 不适合用于作品集或项目展示
+
+因此项目技术路线调整为：
+
+```text
+React + Vite + Tailwind CSS 前端页面
+后续再接入 Python / FastAPI / OpenAI API 后端
