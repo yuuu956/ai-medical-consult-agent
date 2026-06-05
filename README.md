@@ -97,25 +97,47 @@ AI 追问关键信息
 
 ## 六、技术栈规划
 
-初步计划使用：
+当前技术路线：
+
+### 前端
+
+- React
+- Vite
+- Tailwind CSS
+
+### 后端规划
 
 - Python
-- Streamlit
+- FastAPI
 - OpenAI API
+
+### 风险控制
+
 - Rule-based Risk Control
-- GitHub 记录开发过程
+- 非诊断输出约束
+- 高风险症状优先提示
+- 安全提醒机制
+
+### 工程记录
+
+- GitHub 记录完整开发过程
+- docs/devlog.md 记录关键开发节点
 
 ## 七、当前开发状态
 
 - [x] 项目立项
 - [x] 创建基础目录
 - [x] 创建基础文件
-- [ ] 编写产品设计文档
-- [ ] 编写开发日志
-- [ ] 搭建 Python 项目结构
-- [ ] 实现症状收集页面
-- [ ] 实现风险判断规则
-- [ ] 实现科室推荐逻辑
-- [ ] 接入 AI Agent
-- [ ] 完善 Risk Control
+- [x] 编写产品设计文档
+- [x] 编写开发日志
+- [x] 创建 React + Vite 前端项目
+- [x] 配置 Tailwind CSS
+- [x] 完成第一版美观首页 UI
+- [x] 实现前端规则版 Risk Control
+- [x] 实现症状输入、风险等级、科室推荐、就医建议展示
+- [ ] 拆分前端组件
+- [ ] 优化 Risk Control 规则库
+- [ ] 搭建 FastAPI 后端
+- [ ] 接入 OpenAI API
+- [ ] 实现多轮问诊 Agent
 - [ ] 部署 Demo
