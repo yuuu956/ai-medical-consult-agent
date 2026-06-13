@@ -1,145 +1,6 @@
 import { useState } from 'react'
-
-function analyzeSymptom(text) {
-  const input = text.trim()
-
-  if (!input) {
-    return {
-      riskLevel: '待判断',
-      riskColor: 'text-slate-300',
-      department: '待推荐',
-      reason: '请先输入症状描述。',
-      advice: '输入症状后，系统会根据规则进行非诊断性质的风险判断。',
-    }
-  }
-
-  const emergencyKeywords = [
-    '胸痛',
-    '呼吸困难',
-    '喘不上气',
-    '意识模糊',
-    '昏迷',
-    '大量出血',
-    '抽搐',
-    '口眼歪斜',
-    '肢体无力',
-    '剧烈头痛',
-  ]
-
-  const highRiskKeywords = [
-    '高烧',
-    '高热',
-    '持续高热',
-    '39',
-    '40',
-    '呕血',
-    '黑便',
-    '剧烈腹痛',
-    '严重过敏',
-  ]
-
-  const mediumRiskKeywords = [
-    '发烧',
-    '发热',
-    '咳嗽',
-    '头痛',
-    '腹痛',
-    '腹泻',
-    '呕吐',
-    '皮疹',
-    '心悸',
-  ]
-
-  const hasEmergency = emergencyKeywords.some((word) => input.includes(word))
-  const hasHighRisk = highRiskKeywords.some((word) => input.includes(word))
-  const hasMediumRisk = mediumRiskKeywords.some((word) => input.includes(word))
-
-  let riskLevel = 'Low'
-  let riskColor = 'text-emerald-300'
-  let reason = '暂未识别到明显高风险关键词。'
-  let advice = '建议继续观察症状变化。如症状加重、持续不缓解，或出现新的明显不适，应及时线下就医。'
-
-  if (hasEmergency) {
-    riskLevel = 'Emergency'
-    riskColor = 'text-red-300'
-    reason = '识别到可能需要紧急处理的高风险症状。'
-    advice = '建议立即前往急诊，或根据当地情况拨打急救电话。'
-  } else if (hasHighRisk) {
-    riskLevel = 'High'
-    riskColor = 'text-orange-300'
-    reason = '识别到较高风险症状，需要尽快线下就医。'
-    advice = '建议尽快前往医院就诊，由医生结合体格检查和必要检查进一步判断。'
-  } else if (hasMediumRisk) {
-    riskLevel = 'Medium'
-    riskColor = 'text-amber-300'
-    reason = '识别到常见不适症状，建议结合持续时间、严重程度和伴随症状进一步判断。'
-    advice = '建议关注症状变化。如持续加重、反复发作或伴随其他明显不适，应及时就医。'
-  }
-
-  let department = '全科 / 普通内科'
-
-  if (
-    input.includes('咳嗽') ||
-    input.includes('发烧') ||
-    input.includes('发热') ||
-    input.includes('喉咙') ||
-    input.includes('呼吸')
-  ) {
-    department = '呼吸内科'
-  }
-
-  if (
-    input.includes('腹痛') ||
-    input.includes('腹泻') ||
-    input.includes('呕吐') ||
-    input.includes('胃痛')
-  ) {
-    department = '消化内科'
-  }
-
-  if (input.includes('胸痛') || input.includes('心悸')) {
-    department = hasEmergency ? '急诊科 / 心内科' : '心内科'
-  }
-
-  if (
-    input.includes('头痛') ||
-    input.includes('头晕') ||
-    input.includes('抽搐') ||
-    input.includes('意识') ||
-    input.includes('肢体无力')
-  ) {
-    department = hasEmergency ? '急诊科 / 神经内科' : '神经内科'
-  }
-
-  if (
-    input.includes('皮疹') ||
-    input.includes('过敏') ||
-    input.includes('瘙痒')
-  ) {
-    department = '皮肤科'
-  }
-
-  if (
-    input.includes('鼻塞') ||
-    input.includes('流鼻涕') ||
-    input.includes('耳痛') ||
-    input.includes('咽痛')
-  ) {
-    department = '耳鼻喉科'
-  }
-
-  if (hasEmergency) {
-    department = department.includes('急诊科') ? department : `急诊科 / ${department}`
-  }
-
-  return {
-    riskLevel,
-    riskColor,
-    department,
-    reason,
-    advice,
-  }
-}
+import { analyzeSymptom } from './utils/analyzeSymptom'
+import NavBar from './components/NavBar'
 
 function App() {
   const [symptom, setSymptom] = useState('')
@@ -154,33 +15,7 @@ function App() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 py-6">
-        <nav className="flex items-center justify-between rounded-3xl border border-white/70 bg-white/70 px-6 py-4 shadow-sm backdrop-blur">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-xl text-white shadow-lg shadow-blue-500/30">
-              🩺
-            </div>
-            <div>
-              <p className="text-lg font-bold">MediAgent</p>
-              <p className="text-xs text-slate-500">AI 医疗问诊 Agent</p>
-            </div>
-          </div>
-
-          <div className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-            <a href="#workflow" className="hover:text-blue-600">
-              问诊流程
-            </a>
-            <a href="#risk" className="hover:text-blue-600">
-              Risk Control
-            </a>
-            <a href="#demo" className="hover:text-blue-600">
-              Demo
-            </a>
-          </div>
-
-          <button className="rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-900/20">
-            非诊断 Demo
-          </button>
-        </nav>
+        <NavBar />
 
         <main className="grid items-center gap-10 py-16 lg:grid-cols-[1.05fr_0.95fr]">
           <section>
@@ -221,10 +56,12 @@ function App() {
                 <p className="text-3xl font-black text-blue-600">4</p>
                 <p className="mt-1 text-sm text-slate-500">核心流程</p>
               </div>
+
               <div className="rounded-3xl bg-white/80 p-5 shadow-sm">
                 <p className="text-3xl font-black text-emerald-600">0</p>
                 <p className="mt-1 text-sm text-slate-500">诊断输出</p>
               </div>
+
               <div className="rounded-3xl bg-white/80 p-5 shadow-sm">
                 <p className="text-3xl font-black text-cyan-600">Safe</p>
                 <p className="mt-1 text-sm text-slate-500">风险控制</p>
@@ -247,6 +84,7 @@ function App() {
                     <p className="text-sm text-blue-100">Medical AI Console</p>
                     <h2 className="mt-2 text-2xl font-bold">智能问诊工作台</h2>
                   </div>
+
                   <div className="rounded-2xl bg-white/20 p-3 text-3xl">💙</div>
                 </div>
 
@@ -263,6 +101,7 @@ function App() {
                       <p className="text-sm text-blue-100">风险等级</p>
                       <p className="mt-2 text-xl font-bold">Medium</p>
                     </div>
+
                     <div className="rounded-2xl bg-white/15 p-4 backdrop-blur">
                       <p className="text-sm text-blue-100">推荐科室</p>
                       <p className="mt-2 text-xl font-bold">呼吸内科</p>
@@ -310,7 +149,10 @@ function App() {
           </div>
         </section>
 
-        <section id="demo" className="grid gap-6 py-12 lg:grid-cols-[0.95fr_1.05fr]">
+        <section
+          id="demo"
+          className="grid gap-6 py-12 lg:grid-cols-[0.95fr_1.05fr]"
+        >
           <div className="rounded-[2rem] border border-white/80 bg-white/85 p-7 shadow-xl shadow-blue-900/5 backdrop-blur">
             <p className="font-semibold text-blue-600">Consultation Demo</p>
             <h2 className="mt-2 text-3xl font-black">输入你的症状</h2>
@@ -339,6 +181,7 @@ function App() {
                 <p className="font-semibold text-cyan-300">Result Preview</p>
                 <h2 className="mt-2 text-3xl font-black">问诊结果预览</h2>
               </div>
+
               <div className="rounded-2xl bg-white/10 px-4 py-2 text-sm text-cyan-200">
                 非诊断
               </div>
